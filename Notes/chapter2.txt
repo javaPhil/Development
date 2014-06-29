@@ -1,0 +1,12 @@
+Chapter 2 Android and Model-View-Controller (MVC!)
+
+MVC - states that any object in the application must be a model object, a view object, or a controller object
+	-Model object holds the applications data and "business logic"
+	-View objects know how to draw themselves on screen and how to respond to user input, like touches.
+	-Controller objects tie the view and the model objects together.  They contain "application logic".
+	-Controllers are designed to respond to various events triggered by view objects and manage the flow of data. (Just like Servlets)
+	-Android Controllers are typically a subclass of Activity, Fragment, or Service
+	-Objects in the view layer are normally inflated from XML within a layout file.
+Strings.XML
+	-You can use the \ escape sequence to get special characters to show up correctly
+	-Can also use \n for a newline

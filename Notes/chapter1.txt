@@ -1,0 +1,42 @@
+Android Textbook Notes
+
+App Basics
+
+Activity - is an instance of Activity, a class in the Android SDK.  An activity is responsible for managing user interaction with a screen of information
+	-You write subclasses of Activity to implement the functionality that your app requires.
+Layout - defines a set of user interface objects and their positions on the screen.
+	-A layout is made up of definitions written in XML.
+	-Each definition is used to create an object that appears on the screen, like a button or some text.
+	-The default activity layout defines two widgets: a RelativeLayout and a TextView
+Widgets - building blocks you use to compose a user interface
+	-Can show text or graphics, interact with the user, or arrange other widgets on the screen.
+	-Buttons, text input controls, and check boxes are all types of widgets
+	-Android SDK includes many widgets that you can configure
+	-Every widget is an instance of the View class or one of its subclasses (Such as TextView or Button)
+	-Each element has a set of XML attributes.  Each attribute is an instruction about how the widget should be configured
+View Hierarchy
+	-Widgets exist in a hierarchy of View objects called the View Hierarchy
+ViewGroup - is a widget that contains and arranges other widgets
+	-LinearLayout is a child of ViewGroup
+Strings
+	-Strings are located in strings.xml and you reference them by their xml name @hello for "Hello"
+Inflate - when a layout is inflated, each widget in the layout file is instantiated as defined by its attributes.
+	-You specify which layout file to inflate by passing the layout's resource ID
+Resource
+	-A layout is a resource
+	-A resource is a piece of your application that is not code - things like image files, audio files, and XML files
+	-Resources live in a subdirectory of res directory. res/layout, res/values/strings etc
+	-To access a resource in code, you use its resource ID.  The resource ID for the layout is R.layout.activity_quiz
+	-When creating ID's in the XML notice the + sign in the values for android:id but not in the values for android:text
+	-This is because you are creating the IDs and only referencing the strings.
+Member Variables
+	- m prefix on the two member (instance) variable names.
+	-This is an android naming convention
+	
+-Android applications are typically event-driven
+-Unlike Command-line programs or scripts, event driven applications start and then wait for an event, such as a user pressing a button
+
+Listener
+	-a Listener is an object that implements a listener interface for that event
+	-Android SDK comes with listener interfaces for various events, so you do not have to write your own
+Context parameter is typically an instance of Activity (Activity is a subclass of Context).
