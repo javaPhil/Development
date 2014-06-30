@@ -1,0 +1,35 @@
+Chapter 3 The Activity Lifecycle
+
+Every instance of Activity has a lifecycle
+During this lifecycle, an activity transitions between three possible states: running, paused, and stopped.
+For each transition, there is an Activityy method that notifies the activity of the change in its state
+Any subclass of Activity can take advantage of these methods
+onCreate()
+	-The OS calls this method after the activity instance is created but before it is put on screen
+	-Normally, an activity overrides onCreate() to prepare the specifics of its user interface
+		-Like inflating widgets and putting them on screen
+		-Getting references to inflated widgets
+		-Setting listeners on widgets to handle user interaction
+		-Connecting to the external model data
+	-Never call onCreate() or any of the other methods yourself
+	-Override them and modify them, let android do the rest.
+android.util.Log
+	-Sends log messages to a shared system-level log
+	-The first string is typically a TAG constant with the class name as its value.  This makes it easy to determine the source of a particular message
+onSavedInstanceState()
+	-This is used to save data between state changes, like onPause and onCreate
+	-Changing the orientation changes the state, so that data must be saved.
+	-You can save to and restore from a bundle
+		-Bundle are primitive types and objects that implement the Serializable interface
+		-Be sure to implement Serializable if creating new classes
+	-The data saved can also be destroyed if the user navigates away for a while and Android needs the memory
+	-Android will never destroy a running activity to reclaim memory
+		-The activity must be in the paused or stopped state to be destroyed
+		-If it is stopped or paused, the onSavedInstanceState() method is called
+	-onPause() is used to save any type of data that needs to be saved because it will almost always be hit in the closing process
+Log Levels
+	-Log.e Errors
+	-Log.w warnings
+	-Log.i info messages
+	-Log.d debug output
+	-Log.v verbose for DEVELOPMENT ONLY
