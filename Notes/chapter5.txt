@@ -1,0 +1,27 @@
+Chapter 5 Your Second Activity
+
+Manifest - an XML file containing metadata that describes your application to the Android OS
+	-It is always located in the root of the project
+Creating a new Activity
+	-startActivity(Intent intent)
+	-When startActivity is called, it sends it to the OS
+	-The ActivityManager in the OS takes that call and creates the Activity instance and calls its onCreate() method
+Intent - an object that a component can use to communicate with the OS.
+	-Activities are components, but so are services, broadband receivers, and content providers
+	-Intents are multi-purpose communication tools and hte Intent class provides different constructors depending on what you are using the intent to do
+	-public Intent(Context context, Class<?> cls)
+		-The class object specifies the activity that ActivityManager should start.
+		-The Context object tells the ActivityManaager which package the Class object can be found in.
+	-Before starting the activity, the ActivityManager checks the package's manifest for a declaration with the same name as the specified Class
+	-If it finds that declaration, it starts the activity.
+	-If it odes not, you will get ActivityNotFoundException.
+Explicit and Implicit Intents
+	-When you create an Intent with a Context and a Class object, you are creating an explicit intent.
+	-You use explicit intents to start activities within your application
+	-When an activity in your application wants to start an activity in another application, you create an implicit intent.
+Intent Extras
+	-Extras are arbitrary data that the calling activity can include with an intent.
+	-The OS forwards the intent to the recipient activity, which can then access the extra and retrieve the data
+	-The Extra is a structured key-value pair,
+	-To use an extra, use Intent.putExtra
+	-It comes in many flavors but always has two arguments.  First argument is always the key, and the second argument is the value
