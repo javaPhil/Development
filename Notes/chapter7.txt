@@ -24,3 +24,24 @@ Hosting a UI Fragment
 	-The second approach is more complex but you have more control at runtime over your fragments
 	-You determine when the fragment is added to the activity and what happens to it after that
 	-You can remove the fragment, replace it with another, and then add the first fragment back again
+TextWatcher
+	-TextWatcher has three methods
+	-You can watch for different things and update the text based on what happens
+Fragment
+	-When the Fragment class was introduced to Honeycomb, the Activity class was changed to include a piece called the FragmentManager
+	-The FragmentManager is responsible for managing your fragments and adding their views tot he activity's view hierarchy
+	-The FragmentManager handles two things
+		-A list of fragments
+		-A Back stack of fragment transactions
+Fragment Transactions
+	-Are used to add, remove, attach, detach, or replace fragments in the fragment list
+	-They are the heart of how you use fragments to compose and recompose screens at runtime.
+	-The FragmentManager maintains a back stack of fragment transactions that you can navigate.
+	-The add() method is the meat of the transactions
+		-It has two parameters: a container view ID and the newly-created CrimeFragment
+		-The container view ID should look familiar.
+			-It is the resource ID of the FrameLayout that we defined in activity_crime.xml
+			-It tells the FragmentManager where in the activity's view the fragment's view should appear
+			-It is used as a unique identifier for a fragment in the FragmentManagers list
+		-When you need to retrieve the CrimeFragment from the FragmentManager, you ask for it by container view ID
+	
