@@ -1,0 +1,26 @@
+Chapter 7 - UI Fragments and the Fragment Manager
+
+Fragment - is a controller object that an activity can deputize to perform tasks.
+	-More commonly, the task is managing a user interface
+	-The UI can be the entire screen or just one part of the screen
+UI Fragment - a fragment managing a user interface
+	-A UI Fragment has a view of its own that is inflated from a layout file
+	-The Fragment's view contains the interesting UI elements that the user wants to see and interact with
+	-The activity's view contains a spot where the fragment's view will be inserted, or it might have multiple spots for the views of several fragments
+	-You can use fragments associated with the activity to compose and re-compose the screen as your app and users require
+	-The activity's view technically stays the same throughout its lifetime and no laws of android are violated
+Fragments Lifecycle
+	-It is very similar to an activity's lifecycle
+	-One critical difference between the fragments and activity's lifecycles is that fragment lifecycle methods are called by the hosting activity, not the OS
+	-The OS knows nothing about the fragments that an activity is using to manage things.
+	-Fragments are the activity's internal business
+Hosting a UI Fragment
+	-Two options when hosting a UI fragment in an activity
+		-Add the fragment to activity's layout
+		-Add the fragment in the activity's code
+	-The first approach is known as using a layout fragment
+		-Simple but inflexible
+		-If you add the fragment to the activity's layout, you hard-wire the fragment and its view to the activity's view and cannot swap out that fragment during the activity's lifetime
+	-The second approach is more complex but you have more control at runtime over your fragments
+	-You determine when the fragment is added to the activity and what happens to it after that
+	-You can remove the fragment, replace it with another, and then add the first fragment back again
