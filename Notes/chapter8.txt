@@ -1,0 +1,10 @@
+Chapter 8 Creating User Interfaces with Layouts and Widgets
+
+Theme - is a collection of styles
+	-A style resource whose attributes point to other style resources
+	-The Android platform provides themes that your apps can use
+	-Holo light with Dark Action Bar etc
+	-You can apply a style from the app's theme to a widget using a theme attribute reference.
+		-Theme attribute reference - you tell Android's runtime resource manager "Go to the app's theme and find the attribute labled listSeperatorTextViewStyle
+			-This resource points to another style resource
+	
