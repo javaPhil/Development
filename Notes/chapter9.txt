@@ -1,0 +1,8 @@
+Chapter 9 - Displaying Lists with ListFragment
+
+Singleton - is a class that allows only one instance of itself to be created
+	-It exists as long as the application stays in memory, so storing the list in a singleton will keep the crime data available no matter what happens with activities, fragments, and their lifecycles
+	-In Android, it is common to have a Context parameter be required for Singleton use
+		-private CrimeLab(Context appContext)
+	-Whenever you have an application wide singleton, it should always use the application context
+	

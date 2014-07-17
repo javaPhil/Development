@@ -7,4 +7,23 @@ Theme - is a collection of styles
 	-You can apply a style from the app's theme to a widget using a theme attribute reference.
 		-Theme attribute reference - you tell Android's runtime resource manager "Go to the app's theme and find the attribute labled listSeperatorTextViewStyle
 			-This resource points to another style resource
-	
+Screen Pixel Densities and DP and SP
+	-Android automatically scales images to different screen pixel densities using the drawable-ldpi -mdpi -hdpi directories
+	dp - Short for density-independent pixel
+		-Typically used for margins padding, or anything else you would otherwise specify a size with a pixel value
+		-When your display is a higher density, density-independent pixels will expand to fill a larger number of screen pixels.
+		-1 dp is always 1/160th of an inch on a devices screen
+	sp - short for scale-independent pixel.
+		-SP are density-independent pixels that also take into account the user's font size preference.
+		-You will almost always use SP to set display text size
+	pt, mm, in - These are scaled units like dp that allow you to specify interface sizes in points, millimeters, or inches
+Layout Paramters
+	-Attributes whos names do not begin with layout_ are directions to the widget
+	-When it is inflated, the widget clals a method to configure itself based on each of these attributes and their values
+	-When an attribute's name begins with layout_, that attribute is a direction to that widget's parent
+		-These attributes are known as layout parameters and they tell the parent layout how to arrange the child element within the parent
+	-Even when a layout object like LinearLayout is the root element of a layout, it is still a widget with a parent and has layout parameters
+Margin attributes - layout parameters
+	-They determine the distance between widgets
+Padding attributes
+	-Padding tells the widget how much bigger than its contents it should draw itself
