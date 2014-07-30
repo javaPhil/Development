@@ -5,4 +5,9 @@ Singleton - is a class that allows only one instance of itself to be created
 	-In Android, it is common to have a Context parameter be required for Singleton use
 		-private CrimeLab(Context appContext)
 	-Whenever you have an application wide singleton, it should always use the application context
+Adapter - is a controller object that sits between the ListView and the data set containing hte data that the ListView should display
+	-The adapter is responsible for
+		-Creating the necessary view object
+		-Populating it with data from the model layer
+		-Returning the view object to the ListView
 	
