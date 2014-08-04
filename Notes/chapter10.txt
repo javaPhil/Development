@@ -1,0 +1,15 @@
+Chapter 10
+
+Fragment Arguments
+	-Each fragment instance can have a bundle object attached to it
+	-This bundle contains key-value pairs that work just like the intents extras of an Activity.
+	-Each pair is known as an argument
+	-To create fragment arguments, just create a Bundle object then use the put() methods
+Attaching arguments to a fragment
+	-You call Fragment.setArguments(Bundle)
+	-Attaching arguments to a fragment must be done after the fragment is created but before it is added to an activity
+	-To hit this window, Android programmers follow a convention of adding static method named newInstance() to the Fragment class.
+		-This method creates the fragment instance and bundles up and sets its arguments
+	-When the hosting activity needs an instance of that fragment, you have to call the newInstance() method rather than calling hte constructor directly
+	-The activity can pass in any required parameters to newInstance() that the fragment needs to create its arguments
+	

@@ -1,0 +1,10 @@
+Chapter 11
+
+ViewPager
+	-Lets users navigate between list items by swiping across the screen to "page" forward and backward
+	-ViewPager is like an AdapterView (the superclass of ListView) in some ways
+		-An AdapterView requires an Adapter to provide views
+		-A ViewPager requires a PagerAdapter
+	-By Default ViewPager shows the first item in its PagerAdapter
+		-You can have it show the crime that was selected by setting the ViewPager's current item to the index of the selected crime
+	
