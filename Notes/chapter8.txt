@@ -17,9 +17,9 @@ Screen Pixel Densities and DP and SP
 		-SP are density-independent pixels that also take into account the user's font size preference.
 		-You will almost always use SP to set display text size
 	pt, mm, in - These are scaled units like dp that allow you to specify interface sizes in points, millimeters, or inches
-Layout Paramters
-	-Attributes whos names do not begin with layout_ are directions to the widget
-	-When it is inflated, the widget clals a method to configure itself based on each of these attributes and their values
+Layout Parameters
+	-Attributes who's names do not begin with layout_ are directions to the widget
+	-When it is inflated, the widget class a method to configure itself based on each of these attributes and their values
 	-When an attribute's name begins with layout_, that attribute is a direction to that widget's parent
 		-These attributes are known as layout parameters and they tell the parent layout how to arrange the child element within the parent
 	-Even when a layout object like LinearLayout is the root element of a layout, it is still a widget with a parent and has layout parameters

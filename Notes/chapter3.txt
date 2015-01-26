@@ -2,7 +2,7 @@ Chapter 3 The Activity Lifecycle
 
 Every instance of Activity has a lifecycle
 During this lifecycle, an activity transitions between three possible states: running, paused, and stopped.
-For each transition, there is an Activityy method that notifies the activity of the change in its state
+For each transition, there is an Activity method that notifies the activity of the change in its state
 Any subclass of Activity can take advantage of these methods
 onCreate()
 	-The OS calls this method after the activity instance is created but before it is put on screen
