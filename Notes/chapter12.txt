@@ -1,0 +1,14 @@
+Chapter 12 Dialogs
+
+Dialog is an instance of AlertDialog, a subclass of Dialog.  AlertDialog is the all purpose Dialog subclass that you will use most often.
+	-There is a DatePickerDialog subclass of AlertDialog
+AlertDialog is wrapped in an instance of DialogFragment, a subclass of Fragment
+	It is possible to display AlertDialog without a DialogFragment but Android does not recommend it
+	Having the Dialog managed by the FragmentManager gives more options for presenting the dialog
+	AlertDialog will vanish if the device is rotated unless it is wrapped in a Fragment
+
+setTargetFragment(Fragment fragment, int requestCode)
+	This method accepts the fragment that will be the target and requests a code just like the one used in startActivityForResult()
+	The Target fragment can use the request code later to tell which fragment is reporting back
+	The FragmentManager keeps track of the target fragment and request code
+		You can retrieve them by calling getTargetFragment() and getTargetRequestCode() on the fragment that has the target set
