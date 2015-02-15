@@ -1,0 +1,5 @@
+chapter 13 Audio Playback using MediaPlayer
+
+MediaPlayer is the android class for audio and video playback
+	-It can play media from different sources (like a local file or streamed from the Internet) and in many different Formats (WAV, MP3, MPEG-4, 3GPP etc)
+	
