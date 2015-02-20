@@ -1,0 +1,24 @@
+Chapter 17 Saving and Loading Local Files
+
+Every application needs a place to save data.  This one will use a JSON file.
+
+Each application on an Android device has a directory in its sandbox.
+	Keeping files in the sandbox protects them from being accessed by other applications or even the prying eyes of users (unless the device has been rooted)
+	Each sandbox directory is a child of the device's /data/data directory named after the application package
+
+In addition to the sandbox, your application can store files in external storage
+	Typically this is a SD card that may or may not be available on the device
+	Files or whole applications can be stored on an SD card but there are security implications to doing so
+	Most importantly, access to files on external storage is not restricted to your application - anyone can read, write and delete them
+	
+Adding persistent data storage to an app involves two processes:
+	Saving the data out to the file system and loading that data back in when the application is launched
+Each process has two stages.
+In saving, you first transform the data into a storable format and then you write that data to a file.
+In loading, you read the formatted data from the file and then parse it into what the application needs
+
+JSON stands for Javascript Object Notation, a format that has become popular in recent years especially with web services
+
+Android includes the standard org.json package, which has classes that provide simple access to creating and parsing files in JSON format.
+
+XML is another option for formatting data in order to write it to a file and android provides classes for that package as well

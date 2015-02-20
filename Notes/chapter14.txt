@@ -1,0 +1,19 @@
+Chapter 14 Retained Fragments
+
+When the device is rotated the HelloMoonActivity is destroyed.  It calls onPause() onStop() and onDestroy()
+	In onDestroy() the MediaPlayer object is released which stops the media
+
+Fragments have a feature that you can use to keep the MediaPlayer instance alive across a configuration change
+	setRetainInstance(true) because it is default set to false
+	When a fragment is retained, the fragment is not destroyed with the activity
+	Instead it is preserved and passed along to the new activity
+
+During a configuration change, the FragmentManager first destroys the views of the fragment in its list
+	Fragment views always get destroyed and recreated on a configuration change for the same reasons that the activity views are destroyed and recreated
+		If you have a new configuration, then you might need new resources
+		Just incase better matching resources are now available, you rebuild the view from scratch
+	Next, the FragmentManager checks the retainInstance property of each fragment
+		If it is false which is default, then the FragmentManager destroys the fragment instance
+		If it is set to true, then the fragment's view is destroyed, but the fragment itself is not
+		When the new activity is created, the new FragmentManager finds the retained fragments and recreates its view
+		
