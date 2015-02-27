@@ -7,3 +7,17 @@ A camera is an exclusive-access resource: only one activity can access a camera 
 The instance of SurfaceView will be your viewfinder.  A SurfaceView is a special view that lets you render content directly to the screen.
 
 Start by creating the layout for CrimeCameraFragment's view, the CrimeCameraFragment class itself, and the CrimeCameraFragment.  Finally enable CrimeFragment to start an instance of CrimeCameraActivity.
+
+SurfaceHolder is the connection to another object, the Surface.
+	-A Surface represents a buffer of raw pixel data
+	-Surface has a lifecycle:
+		-It is created for you when the SurfaceView appears on screen and is destroyed when the SurfaceView is no longer visible
+		-You make sure nothing is drawn to the Surface when it does not exist
+
+Unlike other View objects, neither SurfaceView nor any of its teammates draw anything into themselves.
+	-A Surface's client is whatever object wants to draw into its buffer.
+	-In our app, the client is the Camera instance
+	-Remember to check to see if nothing is drawn to the Surface when it is not there
+
+SurfaceHolder provides another interface that will let you do this - SurfaceHolder.Callback
+	-This interface listens for events in the lifecycle of a Surface so that you can coordinate the Surface with its client
