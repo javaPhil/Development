@@ -1,0 +1,9 @@
+Chapter 19 - Camera I: Viewfinder
+
+The instance of Camera provides hardware-level access to the devices camera(s).
+
+A camera is an exclusive-access resource: only one activity can access a camera at a time
+
+The instance of SurfaceView will be your viewfinder.  A SurfaceView is a special view that lets you render content directly to the screen.
+
+Start by creating the layout for CrimeCameraFragment's view, the CrimeCameraFragment class itself, and the CrimeCameraFragment.  Finally enable CrimeFragment to start an instance of CrimeCameraActivity.

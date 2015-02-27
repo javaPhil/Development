@@ -44,6 +44,10 @@ public class CrimeLab {
         return sCrimeLab;
     }
 
+    public void deleteCrime(Crime c){
+        mCrimes.remove(c);
+    }
+
     public boolean saveCrimes(){
         try{
             mSerializer.saveCrimes(mCrimes);
