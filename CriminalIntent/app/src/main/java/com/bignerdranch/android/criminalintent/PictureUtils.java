@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Display;
+import android.widget.ImageView;
 
 /**
  * Created by Philip on 2/27/2015.
@@ -15,6 +16,15 @@ public class PictureUtils {
     * Get a BitmapDrawable from a local file that is scaled down
     * to fit the current Window Size
      */
+
+    public static void cleanImageView(ImageView imageView){
+        if(!(imageView.getDrawable() instanceof BitmapDrawable))return;
+
+        //Clean up the view's image for the sake of memory
+        BitmapDrawable b = (BitmapDrawable)imageView.getDrawable();
+        b.getBitmap().recycle();
+        imageView.setImageDrawable(null);
+    }
 
     @SuppressWarnings("deprecation")
     public static BitmapDrawable getScaledDrawable(Activity a, String path){
