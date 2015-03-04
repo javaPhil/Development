@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -83,7 +82,7 @@ public class CrimeCameraFragment extends Fragment{
 
     @Override
     @SuppressWarnings("deprecation")
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime_camera, container, false);
 
         mProgressContainer = v.findViewById(R.id.crime_camera_progressContainer);

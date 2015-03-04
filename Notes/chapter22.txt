@@ -1,0 +1,14 @@
+Chapter 22 - Two Pane Master Detail interface
+
+Alias resource - is a resource that points to another resource.
+	-Alias resources live in the res/values and by convention, are defined in a refs.xml file
+	
+Callbacks
+	-To delegate functionality back to the hosting activity, a fragment typically defines a callback interface named Callbacks
+	-This interface defines work that the fragment needs done by its boss, the hosting activity
+	-Any Activity that will host the fragment must implement this interface
+	-With a callback interface, a fragment is able to call methods on its hosting activity without having to know anything about which activity is hosting it
+	-To implement a callbacks interface, you must define a member variable that hodls an object that implements Callbacks
+	-Then you cast the hosting activity to Callbacks and assign it to that variable
+	-You assign the activity in the Fragment lifecycle method onAttach()
+	-Similarly you set it to null with onDetatch()
