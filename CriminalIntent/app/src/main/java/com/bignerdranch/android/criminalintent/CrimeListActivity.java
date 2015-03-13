@@ -9,10 +9,18 @@ import android.support.v4.app.FragmentTransaction;
 /**
  * Created by Philip on 7/16/2014.
  */
-public class CrimeListActivity extends SingleFragmentActivity implements CrimeListFragment.Callbacks{
+public class CrimeListActivity extends SingleFragmentActivity implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks{
+
     @Override
     protected Fragment createFragment() {
         return new CrimeListFragment();
+    }
+
+    @Override
+    public void onCrimeUpdated(Crime crime) {
+        FragmentManager fm = getSupportFragmentManager();
+        CrimeListFragment listFragment = (CrimeListFragment)fm.findFragmentById(R.id.fragmentContainer);
+        listFragment.updateUI();
     }
 
     @Override

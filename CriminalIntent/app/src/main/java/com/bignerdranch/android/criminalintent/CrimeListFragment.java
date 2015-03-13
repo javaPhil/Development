@@ -45,6 +45,10 @@ public class CrimeListFragment extends ListFragment {
         mCallbacks = (Callbacks)activity;
     }
 
+    public void updateUI(){
+        ((CrimeAdapter)getListAdapter()).notifyDataSetChanged();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
