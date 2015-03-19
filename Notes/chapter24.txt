@@ -1,0 +1,12 @@
+Chapter 24 - Styles and Includes
+
+Android has UI styles, which are meant to eliminate the repetition
+Style resources are similar to CSS styles
+	-Each style defines a set of XML attribute-value pairs
+	-Styles can be organized into a hierarchy: a child has the same attributes and values as its parent, but may override them or add additional values
+
+Like string resources, styles are defined inside of a <resources> tag in an XML file in the res/values folder
+
+Each style is defined by a <style> element with one or more <item> elements
+	-Each item has a name which is the name of an XML attribute, and the text inside the element is the value to apply tot he attribute
+	-To use a style, you refer to it in a style attribute on a view in your layout

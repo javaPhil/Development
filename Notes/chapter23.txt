@@ -1,0 +1,17 @@
+Chapter 23 - More about Intents and Tasks
+
+Android uses tasks to keep track of the user's state within each running application
+
+A task is a stack of activities that the user is connected with.
+	-The activity at the bottom of the stack is called the base activity, and whatever activity is on top is the activity that the user sees
+	-When you press the back button, you are popping the top activity off of this stack
+	-If you are looking at the base activity, hitting the back button will send you back to the home screen
+	
+Using the task manager, you can switch between tasks without affecting each task's state
+	-For instance, if you start entering a new contact and switch to checking your Twitter feed, you will have two tasks started.
+	-If you switch back to editing contacts, your place in both tasks will be saved
+
+Sometimes when you start a new activity, you want the activity added to the current task
+	-Other times you want it started in a new task that is independent of the activity that started it
+	
+By default, new activities are started in the current task
