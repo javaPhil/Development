@@ -1,0 +1,30 @@
+Chapter 25 - XML Drawables and 9-Patches
+
+Android calls anything that is intended to be drawn to the screen a drawable, whether its an abstract shape, or a clever bit of code that subclasses the Drawable class, or a bitmap image.
+
+BitmapDrawable, which wraps an image.
+
+State list drawables, shape drawables, layer list drawables, and nine patch drawables
+	-First three are usually defined in XML files they get grouped together as XML drawables
+
+The Button class is not much more than a View with a default style applied to it
+	-The style comes from whatever theme you have selected and sets a Drawable as the background.
+	-The background drawable was responsible for the 3-D look and the appearance change.
+	
+State list drawable allows you to display a different drawable for each state its associated View is in
+	-There are lots of different states, but here you only care if the button is being pressed or not
+	-Must have a selector root element and one or more item elements that describe its states
+	
+If you work with a professional designer to craft the UI, what they give you may not be achievable with XML drawables
+	-It may still be possible to reuse the rendered asset in multiple places, though.
+	-For stretchable elements like button backgrounds, Android provides a tool called the 9-patch
+	
+A 9-patch file is specially formatted so that Android knows which portions can and cannot be scaled
+	-Done properly, this ensures that the edges and corners of your background remain consistent with the image as it was created
+	-They're called 9-patches because it breaks your image into a 3 x 3 grid - a grid with 9 sections, or patches
+	-The corners of the grid remain unscaled, the sides are only scaled in one dimension, and the center is scaled with both dimensions
+	-Is like a regular png image in everything except two aspects: its file name ends with .9.png and it has an additional one pixel border around the edge
+	-This border is used to specify the location of the center square of hte nine patch
+	-Border pixels are drawn black to indicate the center and transparent to indicate the edges
+	-You can create a 9-patch using any image editor, but it is easier to use the draw9patch tool provides as part of the Android SDK
+	-You can find it int he tools directory of your SDK installation
