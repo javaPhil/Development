@@ -1,0 +1,56 @@
+Chapter 26 - HTTP and background tasks
+
+URL object creates an object from a string like http://www.google.com then calls openConnection to create a connection object pointed at the URL
+	-URL.openConnection() returns a URL connection, but since we are connecting to an http URL, you can cast it to a HTTPURLConnection
+	-That gives you HTTP-specific interfaces for working with request methods, response codes, streaming methods, and more.
+	
+HttpURLCOnenction represents a connection, but it will not actually connect to your endpoint until you call getInputStream() or getOutputStream()
+	-Until then you will not get a valid response code
+Once you create your URL and open a connection, you call read() repeatedly until your connection runs out of data
+	-The inputStream will yield bytes as they are available
+	-When you are done, you close the connection and spit your ByteArrayOutputStream's bytes array
+	
+When working with networking, you have to ask for permission.  Just as users would not want you secretly taking their pictures, they don't want you downloading ASCII farm animals either...sadly.
+
+The next step is to call and test networking code you just added
+	-However, you cannot just simply call the new method directly in the Fragment class.
+	-Instead you need to create a background thread and run your code there.
+	
+The easiest way to work with a background thread is with a utility class called AscyncTask.
+	-AsyncTask creates a background thread for you and runs the code in the doInBackground() method on that thread
+	
+Networking does not happen immediately
+A web server may take as long as second or two to respond, and a file download can take even logner than that
+	-Because working with networking can take so long, Android disallows all netwroking on the main thread in Honeycomb and later versions of Android
+	-If you try to do it, Android will throw a NetworkOnMainThreadException
+	
+A thread is a single sequence of execution
+Code running within a single thread will execute one step after another
+Every Android app starts life with a main thread
+	-The main thread, however, isn't a preordained list of steps
+	-Instead, it sits in an infinite loop and waits for events initiated by the user or the system then executes code in respponse to those events as they occur.
+	
+The main thread runs all the code that updates the UI
+	-This includes the code executed in response to different UI-related events - activity startup, button presses, and so on.
+	-Main thread is sometimes called the UI thread
+	-The event loop keeps the UI code in sequence
+	-It makes sure that none of these operations step on each other while still ensuring that the code is executed in a timely fashion.
+	
+Networking takes a long time compared to other tasks
+	-During that time, the UI will be completely unresponsive, which might result in application not responding or ANR
+	-An ANR occurs when Android's watchdog determines that hte main thread has failed to respond to an important event, like the back button
+	-This is why Android disallowed network operations on the main thread starting with Honeycomb
+	-In Android, you create a background thread and access the network from there
+	-And the easiest way to do that is with AsyncTask
+
+Flickr offers a nice XML API
+	-All the details are located at www.flickr.com/services/api/
+	-It uses the simplest web service REST
+	-You can invoke methods Flickr provides at this endpoint
+	-On the main page of the API documentation, it has a list of API methods
+	
+XMLPullParser
+XMLPullParser is an interface you can use to pull parse events off of a stream of XML
+	-It is used internally by Android to inflate your layout flies
+	-It will work just as well to parse your GalleryItem objects
+
