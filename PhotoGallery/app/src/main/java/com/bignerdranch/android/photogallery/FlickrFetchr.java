@@ -37,7 +37,7 @@ public class FlickrFetchr {
 
         try{
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            System.out.println(TAG + " Response Code: " + connection.getResponseCode());
+            
             InputStream in = connection.getInputStream();
 
             if(connection.getResponseCode() != HttpURLConnection.HTTP_OK){
