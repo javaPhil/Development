@@ -1,0 +1,80 @@
+Chapter 27 - Loopers, Handlers, and HandlerThread
+
+Instead of using TextViews we're going to be using ImageViews to display the images in little blocks
+
+ImageViews will be managed by GridView, which means that their width will vary but their height will remain fixed
+To make the most of the ImageView's space, you have to set its scaleType to centerCrop.  
+	-This setting centers the image and then scales it up so that the smaller dimension is equal to the view and the larger one is cropped on both sides
+	
+Downloading a hundred or a thousand thumbnail images all at once causes two problems
+	-First it could take a long time, and the UI would not be updated until they were all downloaded.  On a slow connection this would take forever
+	-Second is the cost of having to store the entire set of images.  One hundred thumbnails isn't so bad, but what if it were 1000, or infinite?
+Real world apps often choose to download images only when they need to be displayed on screen.
+	-Downloading on demand puts the responsibility on the GridView and its adapter
+	-The adapter will trigger the image downloading as part of its getView() implementation
+AsyncTask is the easiest way to get a background thread, but it is fundamentally ill-suited for repetitive and long-running task work
+	-Instead of using an AsyncTask, we are going to create a dedicated background thread
+	-This is the most common way to implement downloading on an as-needed basis
+	
+The dedicated thread will download photos
+
+In android, the inbox that threads use is called a Message Queue
+	-A thread works by using a message queue is called a message loop; it loops again and again looking for new messages on its queue
+A message loop consists of a thread and a looper
+The Looper is the object that manages a thread's message queue
+
+The main thread is a message loop and has a looper
+	-Everything your main thread does is performed by its looper, which grabs messages off of its message queue and performs the task it specifies
+	-We are going to create a background thread that is a message loop
+	-Using the class HandlerThread that prepares a Looper for you
+	
+Some safety notes
+-You call getLooper() after calling start() on the thread.  This is a way to ensure that the thread's guts are ready before proceeding
+-You call quit() to terminate the thread inside onDestroy.  This is critical.  If you do not quit your HandlerThreads, they will never die....
+
+A Message is an instance of Handler.  You can think of the name Handler as being short for "message handler"
+	-A Message contains several fields:
+		-What - a user defined int that describes the message
+		-obj - a user defined object to be sent with the message
+		-target - the Handler that will handle the message
+	-When you create a Message, it will automatically be attached to a Handler.
+	-When your Message is ready to be processed, Handler will be the object in charge of making it happen
+	
+To do any real work with messages, you need an instance of the target message Handler first
+	-A Handler is not just a target for processing.
+	-A handler is your interface for creating and posting Messages too.
+	-Messages must be posted and consumed on a Looper, because Looper owns the inbox of Message objects
+	-So Handler always has a reference to its co-worker, the Looper
+	-A Handler is attached to exactly one Looper, and a Message is attached to exactly one target Handler called its target
+	-A Looper has a whole queue of Messages
+	-Multiple handlers can be attached to one Looper
+	-This means that your Handler's Messages may be living side by side with another Handler's messages
+	
+Usually, you do not set a message's target Handler by hand
+	-It is better to build the message by calling Handler.obtainMessage()
+	-You pass the other message fields into this method, and it automatically sets the target for you
+	-Handler.ontainMessage() pulls from a common recycling pool to avoid creating new Message objects, so it is also more efficient than creating new instances
+
+Once you have obtained a Message, then you call sendToTarget() to send the Message to its Handler
+	-The Handler will then put the Message on the end of Looper's message queue
+	-In this case, you are going to obtain a message and send it to its target within the implementation of queueThumbnail()
+	-The message's what will be contained defined as MESSAGE_DOWNLOAD.
+	-The obj will be the Token - in this case, the ImageView that the adapter passed in to queueThumbnail()
+	-When the Looper gets to a particular message in the queue, it gives the message to the message's target to handle
+	-Typically, the message is handled in the target's implementation of Handler.handleMessage()
+	
+One way that a HandlerThread can get work done on the main thread is to have the main thread pass its own Handler to the HandlerThread
+
+The main thread is a message loop with handlers and a Looper
+	-When you create a Handler in the main thread, it will be associated with the main thread's looper.
+	-You can then pass that Handler to another thread.
+	-The passed handler maintains its loyalty to the Looper of the thread that created it.
+	-Any messages the Handler is responsible for will be handled on the main thread's queue.
+	
+You can also schedule work on the main thread from the background thread using a Handler attached to the main thread
+
+Handler.post(Runnable) is a convenience method for posting Messages
+
+When a Message has its callback field set, instead of being run by its Handler target, the Runnable in callback is run instead
+
+	
