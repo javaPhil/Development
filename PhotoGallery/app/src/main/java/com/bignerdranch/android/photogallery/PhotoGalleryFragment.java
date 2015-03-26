@@ -1,18 +1,30 @@
 package com.bignerdranch.android.photogallery;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import java.util.ArrayList;
 
@@ -30,8 +42,11 @@ public class PhotoGalleryFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
-        new FetchItemsTask().execute();
+
+
+        updateItems();
 
 //        mThumbnailThread = new ThumbnailDownloader<ImageView>();
         mThumbnailThread = new ThumbnailDownloader<ImageView>(new Handler());
@@ -47,6 +62,10 @@ public class PhotoGalleryFragment extends Fragment{
         mThumbnailThread.start();
         mThumbnailThread.getLooper();
         Log.i(TAG, "Background thread started");
+    }
+
+    public void updateItems(){
+        new FetchItemsTask().execute();
     }
 
     @Override
@@ -71,6 +90,45 @@ public class PhotoGalleryFragment extends Fragment{
         super.onDestroy();
         mThumbnailThread.quit();
         Log.i(TAG, "Background thread destroyed");
+    }
+
+
+
+    @Override
+    @TargetApi(11)
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_photo_gallery, menu);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            //Pull out the SearchView
+            MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+            SearchView searchView = (SearchView)searchItem.getActionView();
+
+            //Get the data from our searchable.xml as a SearchableInfo
+            SearchManager searchManager = (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+            ComponentName name = getActivity().getComponentName();
+            SearchableInfo searchableInfo = searchManager.getSearchableInfo(name);
+
+            searchView.setSearchableInfo(searchableInfo);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_item_search:
+                getActivity().onSearchRequested();
+                return true;
+            case R.id.menu_item_clear:
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putString(FlickrFetchr.PREF_SEARCH_QUERY, null)
+                        .commit();
+                updateItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     void setupAdapter(){
@@ -109,7 +167,18 @@ public class PhotoGalleryFragment extends Fragment{
     private class FetchItemsTask extends AsyncTask<Void, Void, ArrayList<GalleryItem>>{
         @Override
         protected ArrayList<GalleryItem> doInBackground(Void... params) {
-            return new FlickrFetchr().fetchItems();
+            Activity activity = getActivity();
+            if(activity == null) return new ArrayList<GalleryItem>();
+
+            String query = PreferenceManager.getDefaultSharedPreferences(activity)
+                    .getString(FlickrFetchr.PREF_SEARCH_QUERY, null);
+
+            if(query != null){
+                return new FlickrFetchr().search(query);
+            }else{
+                return new FlickrFetchr().fetchItems();
+            }
+
         }
 
         @Override

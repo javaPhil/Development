@@ -1,0 +1,76 @@
+Chapter 28 - Search
+
+In Honeycomb, the Android folks got rid of hardware search buttons.
+Even before that, though, there was no guarantee of having a search button
+
+Modern Android apps that rely on search must always have a search button somewhere in the app if they are targeting pre-3.0 devices
+
+Implementing this is not difficult
+	-Simply call Activity.onSearchRequested()
+	-This method performs the exact same operation as pressing the search button
+	
+Two moving pieces that make an activity searchable
+	-First is an XML file that contains an element called searchable that describes how the search dialogue should display itself
+	
+This XML file is called a search configuration
+	-This file can become huge with instructions
+	-Search suggestions, voice search, global search configuration, action key configurations, and input types all go here
+	-Even the simplest implementation, though, a basic search configuration is required
+	
+The next piece of the puzzle go in AndroidManifest.xml
+	-You need to change the launch mode of your app, and you need to declare an additional intent filter and a piece of metadata for PhotoGalleryActivity
+	-The intent filter advertises that you can listen to search intents, and the metadata is to attach the XML you just wrote to your activity
+	-All of this advertisement work is required to tell Android's SearchManager that your activity is capable of handling searches and to give it your search configuration
+	-SearchManager is an OS-level service that is responsible for presenting the search dialogue and managing its interactions
+	
+The first addition is a familiar intent filter definition
+	-Search results are communicated by calling startActivity() with an intent that has an action of android.intent.action.SEARCH
+	-The search query is put on the intent as an extra
+	-So to indicate that your activity can handle search results, you define a filter for the action.intent.action.SEARCH intent
+	
+The second addition is another metadata tag
+	-We used metadata earlier in the book, but this tag is slightly different
+	-Instead of android:value, it uses android:resource
+	-If you were to pull out the value for metadata.value you would find it contained the string "PhotoGallery" which is the value stored in @string/app_name
+	-The value for metadata.resource, though, would be the integer ID of that resource
+	-In other words, the value of metadata.resource is the value in code of R.string.app_name
+	
+SearchManager requires the integer ID of searchable.xml, not the string value of that XML file
+	-So we use android:resource and give the SearchManager the file's resource id
+	
+The main idea behind search in Android is, the searchable activity
+	-A searchable activity is defined by two things: a search intent filter and a search configuration metadata entry
+With the hardware search button, every search interaction up until the search intent itself is handled by the system
+	-It checks your AndroidManifest.xml to see if your activity is searchable
+	-If it is, then it shows a search dialogue activity on top of your activity
+	-That activity triggers search by sending you a new intent
+	
+There are different kinds of launch modes
+	-Standard - The default behaviour - start up a new activity for every new intent received
+	-singleTop  - If an instance of this activity is already at the top of the back stack, direct the new intent at the existing activity instead of creating a new one
+	-singleTask - Launch this activity into its own task 
+		-If the activity already exists in the task, clear out any activities above it in the back stack and direct the new intent at the existing activity
+	-singleInstance - Launch this activity into its own task
+		-It is the only activity in its task - if any other activities are started from this task, they are launched into their own tasks
+		-If the activity already exists, direct the new intent at the existing activity
+Every activity we've written so far has used the standard launch mode
+	-This behaviour is familiar: when an intent resolves to an activity with the standard launch mode, a new instance of that activity is created and added to the back stack
+	
+The default behavior will not fly for this application
+Instead, you specify the singleTop launch mode
+	-This means instead of starting a new activity, the search intent you receive will go to your already running PhotoGalleryActivity on top of the back stack
+	
+One important thing to note about onNewIntent(Intent): if you need the new intent value, make sure you save it some place
+	-The value you get from getIntent() will have the old intent, not the new one
+	
+Shared preferences are files on your system that you read and edit using the SharedPreferences class
+	-An instance of SharedPreferences acts like a key-value store, much like BUndle, except that it is backed by persistent storage
+	-The keys are strings, and the values are atomic data types
+	-If you look at them you will see that the files are simple XML, but SharedPreferences make it easy to ignore the implementation detail
+	
+Honeycomb added a new class called SearchView. SearchView is an action view - a view that may be included within the action bar
+	-SearchView allows your entire search interface to take place within your activity's action bar, instead of inside a dialog superimposed on your activity
+	-That means that the same styling and theming as your application, which is a good bad fine thing
+	-When you specify an action view, you are saying "Hey Android, instead of using the regular view guts for this item action bar, use this view class instead
+	-SearchView does not generate any onOptionsItemSelected callbacks
+		-Which is a good thing because it means you can leave those callbacks in place for older devices that do not support this new technique
