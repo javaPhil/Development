@@ -1,0 +1,55 @@
+Chapter 29 - Background Services
+
+Service's intents are called "commands"
+	-Each command is an instruction to the service to do something
+	-Depending on the kind of service, that command could be serviced in a variety of ways
+	
+An IntentService services commands off a queue.  When it receives its first command, the IntentService starts up, fires up a background thread, and puts the command on a queue
+
+The IntentService then proceeds to service each command in sequence, calling onHandleIntent(Intent) on its background thread for each command
+	-New commands that come in go back to the back of the queue.
+	-When there are no commands left in the queue, the service stops and is destroyed
+	
+To perform networking in the background safely, some additional code is required
+	-Android provides the ability for a user to turn off networking for background applications
+	-If you have a lot of power hungry applications, this can be a big performance improvement
+
+This does mean, however, that if you are doing networking in the background, you need to verify with the ConnectivityManager that the network is available
+	-Because the API has changed around historically, this requires two checks not one
+	-First check is to verify that ConnectivityManager.getBackgroundDataSetting is true
+	-Second is to verify that ConnectivityManager.getActiveNetworkInfo is not null
+	
+AlarmManager is a system service that can send Intents for you
+	-You use PendingIntent to package up a wish
+	-You can then send that wish to other components on the system, like AlarmManager
+	
+PendingIntent is a token object
+	-When you get one here by calling PendingIntent.getService() you say to the OS, "Please remember that I want to send this intent with startService(Intent)"
+		-Later you call send() on your pendingIntent token, and the OS will send the intent you originally wrapped up exactly the way you asked
+		-If you request a PendingIntent twice with the same intent, you will get the same PendingIntent
+		-You can use this test whether a PendingIntent already exists or to cancel a previously issued PendingIntent
+	
+You can only register one alarm for each PendingIntent
+	-That is how setServiceAlarm(Context, boolean) works when isOn is false: it calls AlarmManager.cancel(PendingIntent) to cancel the alarm for your PendingIntent, then cancels your PendingIntent
+	
+Since PendingIntent is also cleaned up when the alarm is cancelled, you can check whether that PendingIntent exists or not to see whether the alarm is active or not
+
+Updating Options menu items
+
+Usually all you need to do is inflate an options menu.  Sometimes though, you need to update the options menu to reflect the state of your application
+
+Now, options menus are not inflated every time they are used, even on old style options menus
+	-If you need to update the contents of an options menu item, you should instead put that code in onPrepareOptionsMenu(Menu)
+	-This method is called every single time the menu needs to be configured, not just when it is created the first time
+	
+When your service needs to communicate something to the user, the proper tool is almost always a "Notification"
+	-Notifications are items that appear in the notifications drawer, which the user can access by dragging it down from the top of the screen
+	-To post a notification, you need to first create a notification object
+		-Notifications are created by using a builder object, much like AlertDialog
+		-At Minimum, your Notification should have:
+			-Ticker text to display in the status bar when the notification is first shown
+			-An icon to show the status bar after the ticker text goes away
+			-A view to show the Notification drawer to represent the notification itself
+			-A PendingIntent to fire when the user presses the notification in the drawer
+		-Once you have created a Notification object, you can post it by calling notify(int, Notification) on the NotificationManager system service
+
