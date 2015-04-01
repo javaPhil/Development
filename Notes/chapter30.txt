@@ -1,0 +1,69 @@
+Chapter 30 - Broadcast Intents
+
+When many components on the system need to know that some event has occurred, Android uses a "broadcast intent" to tell everyone about it
+	-Broadcast Intents work similarly to intents you have used already, except that they can be received by multiple components at the same time
+	-Broadcast Intents are received by Broadcast Receivers
+	
+Apps that perform an ongoing process for the user usually need to wake themselves up after the device is booted
+	-You can detect when boot is completed by listening for a broadcast intent with the BOOT_COMPLETED action
+	
+Broadcast Receiver is a component that receives intents, just like a service or an activity
+	-And just like services and activities, broadcast receivers must be registered with the system in order to do anything useful
+		-They don't always need to be in the manifest, but this one does
+	-Unlike activities and services, broadcast receivers declared in the manifest almost always declare intent filters
+	-The entire reason broadcast intents exist is to send information to more than one listener, but explicit intents only have one receiver
+	-Explicit Broadcast intents are rare and not used often
+	-Upon waking up, the ephemeral broadcast receiver's onRecieve(Context, Intent) method will run, then it will die.
+
+The fact that broadcast receivers live such short lives restricts the things you can do with them
+	-You cannot use any asynchronous API's, for example, or register any listeners, because your receiver will not be alive any longer than the length to run the onReceive() method
+	-onRecieve() method runs on the main thread, so you cannot do any heavy lifting inside of it
+		-AKA no networking or heavy work with permanent storage
+	
+Dynamic Broadcast Receiver is registered in code, not in the manifest
+	-The receiver itself is typically defined as an inner instance, like a button-click listener
+		
+Any Intent Filter you express in XML can also be expressed in code this way
+	-Just call addCategory(String), and addAction(String), addDataPath(String), and so on to configure your filter
+
+Dynamically registered broadcast receivers must also take care to clean themselves up
+	-Typically, if you register a receiver in a startup lifecycle method, you will call Context.unregisterReceiver(BroadcastReciever) in the corresponding shutdown method
+	-Here, you register inside of onResume() and unregister inside of onPause()
+	
+One problem with using a broadcast like this is that anyone on the system can listen to it or trigger your receivers
+
+You can preclude these unauthorized intrusions into your personal business a couple of ways
+	-If the receiver is declared in your manifest and is internal to your app, you can add an android:exported="false" attribute to your receiver tag
+	-This will prevent it from being visible to other applications on the system
+	-In other circumstances, you can create your own permission
+	-This is done by adding a permission tag to your AndroidManifest.xml
+	
+You define your own custom permission with a protection level
+
+Every custom permission has to specify a value for android:protectionLevel
+	-Your permission's protectionLevel tells Android how it should be used
+	-In this case, we used a protectionLevel of signature
+	-The signature protection level means that if another application wants to use your permission, it has to be signed with the same key as your application
+	-This is usually the right choice for permissions you use internally in your application
+	-Since other developers don't have your key, they can't get access to anything this permission protects
+	-There are a couple different values for protectionLevel:
+		-Normal - This is for protecting app functionality that won't do anything dangerous, like access secure personal data or send data to the internet
+		-Dangerous - This is for everything we said not to use normal for - for accessing personal data, sending and receiving things from network interfaces etc
+		-Signature - the system grants this permission if the app is signed with the same certificate as the declaring application, and denies it otherwise
+		-signatureOrSystem - This is like signature, but it also grants permission to all packages in the Android system image
+		
+Ordered Broadcast Intents allow a sequence of broadcast receivers to process a broadcast intent in order
+	-They also allow the sender of a broadcast receive results from the broadcasts recipients by passing in a special broadcast receiver, called the result receiver
+On the receiving side, this looks mostly the same as a regular broadcast
+	-You get an additional tool, a set of methods used to change the return value of your receiver
+	-Here you want to cancel the notification.
+	-This can be communicated by use of a simple integer result code
+		-setResultCode(int) method to set the result code to Activity.RESULT_CANCELED
+		
+The result receiver is a special receiver that will run after all the other recipients of your ordered broadcast intent
+	-In other circumstances, you would be able to use the result receiver here to receive the broadcast and post the notification object
+	-It wont work here though
+	-This broadcast intent will often be sent right before PollService dies which means your broadcast receiver might be dead, too
+	
+	
+	
