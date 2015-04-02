@@ -1,0 +1,16 @@
+Chapter 31 - Browsing the Web & WebView
+
+You will browse to this URL first by using your old friend implicit intent.  This intent will start up the browser with your photo URL
+
+Sometimes, you want to display web content within your own activities instead of heading off to the browser
+	-You may want to display HTML that you generate yourself, or you may want to lock down the browser window somehow
+	-For apps that include help documentation, it is common to implement it as a web page so that its easy to update
+	
+When you want to present web content within your own user interface, you use the WebView class
+
+Progress updates and title updates have their own callback methods onProgressChanged() and onRecievedTitle()
+	-The progress you receive from onProgressChanged is an integer from 0 to 100.  If it is 100 you know the page is done loading, so you hide ProgressBar
+	
+For some classes like VideoView, the Android documentation recommends that you allow the activity to handle the configuration change itself
+	-This means that instead of the activity being destroyed, it simply moves its views around to fit the new screen size
+	-As a result, WebView does not have to reload all of its data

@@ -1,0 +1,55 @@
+Chapter 32 - Custom Views and Touch Events
+
+Android provides many excellent standard views and widgets, but sometimes you need a custom view that presents visuals that are totally unique to your app.
+
+While there are all kinds of custom views, you can shoehorn them into two broad categories
+	-Simple - A simple view may be complicated inside; what makes it simple is that it has no child views
+		-A simple view will almost always perform custom rendering as well
+	-Composite - Composite views are compromised of other view objects.
+		-Composite views typically manage child views but do not perform custom rendering
+		-Instead the rendering is delegated to each child view
+		
+There are three steps to follow when creating a custom view:
+	-Pick a superclass.  For a simple custom view, View is a blank canvas, so it is the most common Choice
+		-For a composite custom view, choose an appropriate layout class
+	-Subclass this class and override at least one constructor from the superclass
+		-Or create your own constructor that calls one of the superclass's constructors
+	-Override other key methods to customize behaviour
+When using a custom layout view, you must use the fully qualified class name so that the layout inflater can find it
+	-The inflater works through a layouts file creating View instances
+	-If the element name is an unqualified class name, then the inflater looks for a class with that name in the android.view and android.widget packages
+	-If the class lives somewhere else, then the layout inflater will not find it, and your app will crash
+	-So for custom classes and other classes that live outside of android.view and android.widget you must always specify the fully qualified class name
+	
+The way to listen for touch events is to set a touch event listener using the following View method:
+	-onTouchEvent(MotionEvent event)
+	-This method receives an instance of MotionEvent, a class that describes the touch event, including its location and its action
+		-ACTION_DOWN
+		-ACTION_MOVE
+		-ACTION_UP
+		-ACTION_CANCEL
+		
+BoxDrawingView is intended to draw boxes on the screen, not just coordinates
+
+To define a box you need two things:
+	-The origin point (where the finger was initially placed)
+	-The current point (where the finger actually is)
+When the user touches BoxDrawingView, a new Box will be created and added to an array of existing boxes
+
+When your application is launched, all of its views are "invalid"
+		-This means that they have not drawn anything to the screen
+		-To fix this situation, Android calls the top-level View's draw() method
+		-This causes the view to draw itself, which causes its children to draw themselves
+		-Those children's children then draw themselves and so on
+		-When all the views in the hierarchy have drawn themselves, then the top-level view is no longer invalid
+
+The call to invalidate() that you make is in response to ACTION_MOVE in onTouchEvent() makes the BoxDrawingView invalid again
+	-This causes it to redraw itself and will cause onDraw to be called again
+	
+The Canvas class has all the drawing operations you perform.
+	-The methods you call on Canvas determine where and what you draw - a line, a circle, a word, or a rectangle
+The Paint class determines how these operations are done
+	-The methods you call on Paint specify characteristics - whether shapes are filled, which font text is drawn in, and what color lines are
+	
+	
+	
