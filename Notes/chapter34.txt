@@ -1,0 +1,26 @@
+Chapter 34 - Local Databases with SQLite
+
+SQLite is a open source, multi-platform library that gives you access to a powerful, relational database API backed by a single file on a disk
+
+Android includes a Java front-end to SQLite through the SQLiteDatabase class, which provides result sets as Cursor instances
+
+In order to store anything in a database, first you need to define the structure of the database and open it
+	-Since this is such a common task in Android, a helper class exists
+	-SQLiteOpenHelper encapsulates the chore of creating, opening, and updating databases for storing your application data
+	
+When designing an application's database storage API, you typically create one subclass of SQLiteOpenHelper for each type of database you need to create and manage
+	-You then create one instance of your subclass for each distinct SQLite database file you need to access
+	-Most applications, including RunTracker, will just have one subclass of SQLiteOpenHelper and share a single instance of it with the rest of the application components
+
+In object oriented programming, the most common pattern for database design is to use one database table for each class in your application's data model.	
+	-For RunTracker, there are two classes to store: Run and Location
+	
+Implementing a subclass of SQLiteOpenHelper requires you to override two methods: onCreate(SQLiteDatabase) and onUpgrade(SQLiteDatabase, int, int)
+	-In onCreate() your job is to establish the schema for a newly created database
+	-In onUpgrade() you have the opportunity to execute migration code to move from one version of the database schema to another
+	
+It is also common to implement a simplified constructor that fills in some of the arguments required by the superclass version
+	-In this example, you pass a constant name for the database file, a null for the optional CursorFactory, and a constant integer version number
+SQLiteOpenHelper supports the ability to manage different versions of a database schema.
+	-It expects the version number to be an increasing integer value starting at one
+	-In a real application, each time you made changes to your database schema, you would increment the version constant and write code in the onUpgrade() method to handle any schema or data changes that were necessary between versions
