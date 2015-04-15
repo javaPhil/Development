@@ -24,3 +24,14 @@ It is also common to implement a simplified constructor that fills in some of th
 SQLiteOpenHelper supports the ability to manage different versions of a database schema.
 	-It expects the version number to be an increasing integer value starting at one
 	-In a real application, each time you made changes to your database schema, you would increment the version constant and write code in the onUpgrade() method to handle any schema or data changes that were necessary between versions
+	
+Querying a SQLiteDatabase returns an instance of Cursor describing the results
+	-The Cursor API is simple and flexible enough to support any kind of result from any query
+	-Cursors treat their results as a series of rows and columns, and only support Strings and primitive types for values
+	
+A pattern we will use in this chapter takes advantage of a built-in subclass of Cursor called CursorWrapper
+
+CursorWrapper is designed to wrap an existing Cursor and forward along all of the method calls to it
+	-On its own, it is not very useful; but as a superclass, it can provide you with a good foundation on which to build your own custom cursor implementations specific for your model objects
+	
+	
