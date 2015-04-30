@@ -46,6 +46,10 @@ public class RunManager {
         return sRunManager;
     }
 
+    public RunDatabaseHelper.LocationCursor queryLocationsForRun(long runId){
+        return mHelper.queryLastLocationForRun(runId);
+    }
+
     public Location getLastLocationForRun(long runId){
         Location location = null;
         RunDatabaseHelper.LocationCursor cursor = mHelper.queryLastLocationForRun(runId);

@@ -2,10 +2,13 @@ package com.bignerdranch.android.runtracker;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +21,10 @@ public class RunFragment extends Fragment {
 
     private static final String TAG = "RunFragment";
     private static final String ARG_RUN_ID = "RUN_ID";
+    private static final int LOAD_RUN = 0;
+    private static final int LOAD_LOOCATION = 1;
 
-    private Button mStartButton, mStopButton;
+    private Button mStartButton, mStopButton, mMapButton;
     private TextView mStartedTextView, mLatitudeTextView,
             mLongitudeTextView, mAltitudeTextView, mDurationTextView;
 
@@ -61,8 +66,11 @@ public class RunFragment extends Fragment {
         if(args != null){
             long runId = args.getLong(ARG_RUN_ID, -1);
             if(runId != -1){
-                mRun = mRunManager.getRun(runId);
-                mLastLocation = mRunManager.getLastLocationForRun(runId);
+//                mRun = mRunManager.getRun(runId);
+                LoaderManager lm = getLoaderManager();
+                lm.initLoader(LOAD_RUN, args, new RunLoaderCallbacks());
+//                mLastLocation = mRunManager.getLastLocationForRun(runId);
+                lm.initLoader(LOAD_LOOCATION, args, new LocationLoaderCallbacks());
             }
         }
     }
@@ -99,6 +107,16 @@ public class RunFragment extends Fragment {
             }
         });
 
+        mMapButton = (Button)view.findViewById(R.id.run_mapButton);
+        mMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), RunMapActivity.class);
+                i.putExtra(RunMapActivity.EXTRA_RUN_ID, mRun.getId());
+                startActivity(i);
+            }
+        });
+
         updateUI();
 
         return view;
@@ -130,11 +148,53 @@ public class RunFragment extends Fragment {
             mLatitudeTextView.setText(Double.toString(mLastLocation.getLatitude()));
             mLongitudeTextView.setText(Double.toString(mLastLocation.getLongitude()));
             mAltitudeTextView.setText(Double.toString(mLastLocation.getAltitude()));
+            mMapButton.setEnabled(true);
+        }else{
+            mMapButton.setEnabled(false);
         }
         mDurationTextView.setText(Run.formatDuration(durationSeconds));
 
         mStartButton.setEnabled(!started);
         mStopButton.setEnabled(started && trackingThisRun);
 
+    }
+
+
+    private class RunLoaderCallbacks implements LoaderManager.LoaderCallbacks<Run>{
+
+        @Override
+        public Loader<Run> onCreateLoader(int id, Bundle args) {
+            return new RunLoader(getActivity(), args.getLong(ARG_RUN_ID));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Run> loader, Run data) {
+            mRun = data;
+            updateUI();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Run> loader) {
+            //do nothing
+        }
+    }
+
+    private class LocationLoaderCallbacks implements LoaderManager.LoaderCallbacks<Location>{
+
+        @Override
+        public Loader<Location> onCreateLoader(int id, Bundle args) {
+            return new LastLocationLoader(getActivity(), args.getLong(ARG_RUN_ID));
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Location> loader, Location data) {
+            mLastLocation = data;
+            updateUI();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Location> loader) {
+            //Do nothing
+        }
     }
 }

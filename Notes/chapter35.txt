@@ -1,0 +1,32 @@
+Chapter 35 - Loading Asynchronous Data with Loaders
+
+A loader is designed to load some kind of data (an object) from some source.
+
+The source could be disk, a database,  ContentProvider, the network, or another process.
+
+The loader will do the job of fetching the data without blocking the main thread and delivering the results to whomever is interested
+
+There are three built-in types of loaders: Loader, AsyncTaskLoader, and CursorLoader.
+
+Loader is the base class, and not very useful on its own.  It defines the API that the LoaderManager uses to communicate with all loaders.
+
+AsyncTaskLoader is an abstract Loader that uses an AsyncTask to move the work of loading data to another thread.
+	-Almost all useful loader classes you will create will be a subclass of AsyncTaskLoader
+	
+Finally CursorLoader extends AsyncTaskLoader to load a Cursor from a ContentProvider via the ContentResolver
+	-Unfortunately for RunTracker, there is no way to use CursorLoader with cursors that come from a SQLiteDatabase
+	
+All communication with loaders is handled by the LoaderManager
+	-This class is responsible for starting, stopping, and maintaining the lifecycle of any Loaders associated with your component.
+	-Within a Fragment or an Activity, you can use the getLoaderManager() method to return an implementation to work with
+
+Use the initLoader(int, Bundle, LoaderCallbacks<D>) method to trigger the initialization of a Loader.
+	-The first argument is an integer identifier for the loader
+	-The second is a Bundle of arguments (which can be null)
+	-The last  is an implementation of the LoaderCallbacks<D> interface
+		-There are multiple ways to implement LoaderCallbacks, but the most common is to have your Fragment implement it directly
+
+You can use restartLoader() method to force an existing loader to restart
+	-This is commonly used to reload data that you know (or suspect) to be stale.
+	
+The LoaderCallbacks<D> interface has three methods: onCreateLoader(), onLoadFinished(), and onLoaderReset()
