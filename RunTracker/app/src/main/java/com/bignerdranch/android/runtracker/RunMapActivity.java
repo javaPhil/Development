@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 public class RunMapActivity extends SingleFragmentActivity {
 
     /* A key for passing a run ID as a long */
-    public static final String EXTRA_RUN_ID = "com.bignerdranch.android.runtracker.run_id";
+    public static final String EXTRA_RUN_ID = "RUN_ID";
 
     @Override
     protected Fragment createFragment() {

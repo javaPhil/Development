@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.Display;
@@ -47,39 +48,36 @@ public class RunMapFragment extends SupportMapFragment implements LoaderManager.
         }
     }
 
-    public void updateUI(){
-        if(mGoogleMap == null || mLocationCursor == null) return;
+    private void updateUI() {
+        if (mGoogleMap == null || mLocationCursor == null)
+            return;
 
-        //Set up an overlay on the map for this run's locations
-        //Create a polyline with all of the points
+        // set up an overlay on the map for this run's locations
+        // create a polyline with all of the points
         PolylineOptions line = new PolylineOptions();
-        //Also create a LatLngBounds so you can zoom to fit
+        // also create a LatLngBounds so we can zoom to fit
         LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
-
-        //Iterate over the locations
+        // iterate over the locations
         mLocationCursor.moveToFirst();
-        while(!mLocationCursor.isAfterLast()){
+        while (!mLocationCursor.isAfterLast()) {
             Location loc = mLocationCursor.getLocation();
             LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-            Resources r = getResources();
-
-            //If this is the first location add a marker for it
-            if(mLocationCursor.isFirst()){
+            // if this is the first location, add a marker for it
+            if (mLocationCursor.isFirst()) {
                 String startDate = new Date(loc.getTime()).toString();
                 MarkerOptions startMarkerOptions = new MarkerOptions()
                         .position(latLng)
-                        .title(r.getString(R.string.run_start))
-                        .snippet(r.getString(R.string.run_started_at_format, startDate));
+                        .title(getResources().getString(R.string.run_start))
+                        .snippet(getResources().getString(R.string.run_started_at_format, startDate));
                 mGoogleMap.addMarker(startMarkerOptions);
-
-            }else if(mLocationCursor.isLast()){
-                //If this is the last location, and also not the first, add a marker
+            } else if (mLocationCursor.isLast()) {
+                // if this is the last location, and not also the first, add a marker
                 String endDate = new Date(loc.getTime()).toString();
                 MarkerOptions finishMarkerOptions = new MarkerOptions()
                         .position(latLng)
-                        .title(r.getString(R.string.run_finished))
-                        .snippet(r.getString(R.string.run_finished_at_format, endDate));
+                        .title(getResources().getString(R.string.run_finished))
+                        .snippet(getResources().getString(R.string.run_finished_at_format, endDate));
                 mGoogleMap.addMarker(finishMarkerOptions);
             }
 
@@ -87,14 +85,14 @@ public class RunMapFragment extends SupportMapFragment implements LoaderManager.
             latLngBuilder.include(latLng);
             mLocationCursor.moveToNext();
         }
-        //Add the polyline to the map
+        // add the polyline to the map
         mGoogleMap.addPolyline(line);
-        //Make the map zoom to show the track, with some padding
-        //Use the size of hte current display in pixels as a bounding box
+        // make the map zoom to show the track, with some padding
+        // use the size of the current display in pixels as a bounding box
         Display display = getActivity().getWindowManager().getDefaultDisplay();
-        //Construct a movement instruction for the map camera
-        LatLngBounds latLngBounds = latLngBuilder.build();
-        CameraUpdate movement = CameraUpdateFactory.newLatLngBounds(latLngBounds, display.getWidth(), display.getHeight(), 15);
+        // construct a movement instruction for the map camera
+        CameraUpdate movement = CameraUpdateFactory.newLatLngBounds(latLngBuilder.build(),
+                display.getWidth(), display.getHeight(), 15);
         mGoogleMap.moveCamera(movement);
     }
 
@@ -125,15 +123,23 @@ public class RunMapFragment extends SupportMapFragment implements LoaderManager.
         return rf;
     }
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View v = super.onCreateView(inflater, container, savedInstanceState);
+//
+//        //Stash a reference to the GoogleMap
+////        mGoogleMap = getMap();
+////        //Show the users location
+////        mGoogleMap.setMyLocationEnabled(true);
+//
+//        return v;
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = super.onCreateView(inflater, container, savedInstanceState);
-
-        //Stash a reference to the GoogleMap
-        mGoogleMap = getMap();
-        //Show the users location
-        mGoogleMap.setMyLocationEnabled(true);
-
-        return v;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        SupportMapFragment mapFragment = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map_container);
+        mapFragment.getMapAsync();
     }
+
 }
