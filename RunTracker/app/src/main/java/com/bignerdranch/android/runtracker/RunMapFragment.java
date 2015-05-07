@@ -123,23 +123,23 @@ public class RunMapFragment extends SupportMapFragment implements LoaderManager.
         return rf;
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View v = super.onCreateView(inflater, container, savedInstanceState);
-//
-//        //Stash a reference to the GoogleMap
-////        mGoogleMap = getMap();
-////        //Show the users location
-////        mGoogleMap.setMyLocationEnabled(true);
-//
-//        return v;
-//    }
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map_container);
-        mapFragment.getMapAsync();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+
+        //Stash a reference to the GoogleMap
+        mGoogleMap = getMap();
+        //Show the users location
+        mGoogleMap.setMyLocationEnabled(true);
+
+        return v;
     }
+
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        SupportMapFragment mapFragment = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map_container);
+//        mapFragment.getMapAsync();
+//    }
 
 }
